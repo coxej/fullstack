@@ -17,4 +17,6 @@ app.use(express.json());
 app.use('/products', productRoutes);
  
 app.listen(8000, () => console.log('Server running at port 8000'));
+
+// Nodemon has to be run this way when it is installed locally using --save-dev
 // ./node_modules/nodemon/bin/nodemon.js index

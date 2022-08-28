@@ -4,13 +4,18 @@ import { Link } from "react-router-dom";
  
 const ProductList = () => {
     const [products, setProduct] = useState([]);
+    let ignore = false;
  
     useEffect(() => {
-        getProducts();
+        // ignore stops this hook from firing twice
+        // even though this hook should only fire twice in development
+        if (!ignore) getProducts();
+        return () => ignore = true;
     }, []);
  
     const getProducts = async () => {
         const response = await axios.get('http://localhost:8000/products');
+        console.log(response);
         setProduct(response.data);
     }
  

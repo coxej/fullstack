@@ -1,12 +1,21 @@
+import { Sequelize } from "sequelize";
+import db from "../config/database.js";
 import Product from "../models/productModel.js";
  
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.findAll();
+        // Built-in
+        // const products = await Product.findAll();
+        
+        // Raw SQL Query
+        const products = await db.query("SELECT id, title, price FROM products", {type: db.QueryTypes.SELECT});
         res.json(products);
     } catch (error) {
         res.json({ message: error.message });
-    }  
+    }
+
+    // Different way of accomplishing whats above
+    // Product.findAll().then( products => { res.json(products); } ).catch( error => { res.status(500).send(); } );
 }
  
 export const getProductById = async (req, res) => {
