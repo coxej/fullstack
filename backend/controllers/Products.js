@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import db from "../config/database.js";
-import Product from "../models/productModel.js";
+//import Product from "../models/productModel.js";
  
 export const getAllProducts = async (req, res) => {
     try {
@@ -20,11 +20,14 @@ export const getAllProducts = async (req, res) => {
  
 export const getProductById = async (req, res) => {
     try {
-        const product = await Product.findAll({
-            where: {
-                id: req.params.id
-            }
-        });
+        // const product = await Product.findAll({
+        //     where: {
+        //         id: req.params.id
+        //     }
+        // });
+        
+        // Raw SQL Query
+        const product = await db.query(`SELECT id, title, price FROM products WHERE id = ${req.params.id}`, {type: db.QueryTypes.SELECT});
         res.json(product[0]);
     } catch (error) {
         res.json({ message: error.message });
@@ -33,7 +36,10 @@ export const getProductById = async (req, res) => {
  
 export const createProduct = async (req, res) => {
     try {
-        await Product.create(req.body);
+        // await Product.create(req.body);
+        
+        // Raw SQL Query
+        await db.query(`INSERT INTO products (title, price) VALUES (${req.body.title}, ${req.body.price})`, {type: db.QueryTypes.INSERT});
         res.json({
             "message": "Product Created"
         });
